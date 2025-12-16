@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: <%= ENV.fetch("POSTGRES_USER", "postgres") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "postgres") %>
+  host: <%= ENV.fetch("POSTGRES_HOST", "localhost") %>
+
+development:
+  <<: *default
+  database: flexcar_promotions_development
+
+test:
+  <<: *default
+  database: flexcar_promotions_test
+
+production:
+  <<: *default
+  database: flexcar_promotions_production
+  username: flexcar_promotions
+  password: <%= ENV["FLEXCAR_PROMOTIONS_DATABASE_PASSWORD"] %>
