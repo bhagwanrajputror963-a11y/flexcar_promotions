@@ -26,9 +26,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "pg", "~> 1.5"
 
   spec.add_development_dependency "factory_bot_rails", "~> 6.5"
-  spec.add_development_dependency "rspec-rails", "~> 7.1"
+  spec.add_development_dependency "rspec-rails", "~> 8.0"
   spec.add_development_dependency "rubocop", "~> 1.70"
   spec.add_development_dependency "rubocop-rails", "~> 2.27"
   spec.add_development_dependency "rubocop-rspec", "~> 3.3"
-  spec.add_development_dependency "shoulda-matchers", "~> 6.4"
+  spec.add_development_dependency "shoulda-matchers", "~> 7.0"
 end
