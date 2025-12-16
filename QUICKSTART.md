@@ -38,9 +38,26 @@ bin/rails console
 ```
 
 ```ruby
+# Create brand and category
+brand = FlexcarPromotions::Brand.create!(name: 'TechBrand')
+category = FlexcarPromotions::Category.create!(name: 'Electronics')
+
 # Create items
 laptop = FlexcarPromotions::Item.create!(
-  name: 'Laptop', price: 1000, sale_unit: 'quantity', category: 'electronics'
+  name: 'Laptop',
+  price: 1000,
+  sale_unit: 'quantity',
+  category: category,
+  brand: brand
+)
+
+# Or use string values (auto-creates if needed)
+laptop = FlexcarPromotions::Item.create!(
+  name: 'Laptop',
+  price: 1000,
+  sale_unit: 'quantity',
+  category: 'Electronics',
+  brand: 'TechBrand'
 )
 
 # Create promotion
@@ -67,10 +84,10 @@ pricing = cart.calculate_total
 ```
 flexcar_promotions/
 ├── app/
-│   ├── models/              # Item, Cart, CartItem, Promotion
+│   ├── models/              # Item, Brand, Category, Cart, CartItem, Promotion
 │   └── services/            # PricingService & Promotion Calculators
-├── spec/                    # 47 comprehensive specs
-├── db/migrate/              # 4 migrations
+├── spec/                    # 73 comprehensive specs
+├── db/migrate/              # 7 migrations
 ├── demo.rb                  # Working demo script
 ├── README.md                # Full documentation
 ├── INTEGRATION.md           # Integration guide

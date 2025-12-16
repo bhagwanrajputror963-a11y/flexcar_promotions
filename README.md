@@ -33,6 +33,18 @@ $ rails db:migrate
 
 ## Usage
 
+### Creating Brands and Categories
+
+```ruby
+# Create brands
+tech_brand = FlexcarPromotions::Brand.create!(name: 'TechBrand')
+coffee_co = FlexcarPromotions::Brand.create!(name: 'CoffeeCo')
+
+# Create categories
+electronics = FlexcarPromotions::Category.create!(name: 'Electronics')
+food = FlexcarPromotions::Category.create!(name: 'Food')
+```
+
 ### Creating Items
 
 ```ruby
@@ -41,8 +53,8 @@ laptop = FlexcarPromotions::Item.create!(
   name: 'Laptop',
   price: 1000.00,
   sale_unit: 'quantity',
-  category: 'electronics',
-  brand: 'TechBrand'
+  category: electronics,
+  brand: tech_brand
 )
 
 # Item sold by weight
@@ -50,8 +62,17 @@ coffee = FlexcarPromotions::Item.create!(
   name: 'Coffee Beans',
   price: 0.05,  # price per gram
   sale_unit: 'weight',
-  category: 'food',
-  brand: 'CoffeeCo'
+  category: food,
+  brand: coffee_co
+)
+
+# You can also use string values for convenience (auto-creates if needed)
+laptop = FlexcarPromotions::Item.create!(
+  name: 'Laptop',
+  price: 1000.00,
+  sale_unit: 'quantity',
+  category: 'Electronics',  # finds or creates Category
+  brand: 'TechBrand'        # finds or creates Brand
 )
 ```
 
@@ -69,14 +90,14 @@ FlexcarPromotions::Promotion.create!(
   end_time: 1.week.from_now
 )
 
-# Percentage discount
+# Percentage discount on a category
 FlexcarPromotions::Promotion.create!(
   name: '15% off Electronics',
   promotion_type: 'percentage_discount',
   value: 15,
   target_type: 'Category',
-  start_time: Time.current,
-  config: { 'category' => 'electronics' }
+  target_id: electronics.id,
+  start_time: Time.current
 )
 
 # Buy X Get Y
@@ -158,10 +179,12 @@ cart.clear
 
 ### Models
 
-- **Item**: Represents products in the catalog
+- **Item**: Represents products in the catalog (belongs to Brand and Category)
+- **Brand**: Product brands, has many Items
+- **Category**: Product categories, has many Items
 - **Cart**: Shopping cart that holds cart items
 - **CartItem**: Join model between Cart and Item, stores quantity/weight
-- **Promotion**: Defines promotional rules and discounts
+- **Promotion**: Defines promotional rules and discounts (can target Item, Brand, or Category)
 
 ### Services
 
@@ -220,8 +243,8 @@ The codebase follows Ruby community best practices:
 
 ## Requirements
 
-- Ruby >= 3.0
-- Rails >= 8.0
+- Ruby >= 3.3.6
+- Rails >= 8.1
 
 ## Development
 
@@ -247,11 +270,11 @@ bundle exec rails runner demo.rb
 ```
 
 ## Improvements
-1. We can add money gem for currency conversion and management. I didn't add it because it was not mentioned as a requirement.
-2. I didn't add any Sidekiq or background job because it can be handled in the main app.
-3. I mostly managed all test cases but we can add more based on conditions and requirements.
-4. I added demo.rb file for manual testing.
-5. I followed service architecture because we need to do calculations, so I followed Avoid Fat Models — Use Service Objects.
+1. Currency conversion using the money gem was not added since it was not part of the stated requirements.
+2. Sidekiq or background jobs were not introduced because all logic can be handled synchronously in the main application.
+3. Most critical test cases are covered, and additional tests can be added as requirements and edge cases evolve.
+4. A demo.rb file was added to support manual testing and to clearly demonstrate the system behavior.
+5. A service-oriented architecture was used to handle complex calculations while avoiding fat models and improving maintainability.
 
 ## Contributing
 

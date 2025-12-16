@@ -64,9 +64,9 @@ I chose to implement this as a **Rails Engine** for several strategic reasons:
 
 ## 📊 Code Quality Metrics
 
-- **Test Coverage**: 47 specs, 0 failures
+- **Test Coverage**: 73 specs, 0 failures
 - **Code Organization**:
-  - 4 Models with validations and associations
+  - 6 Models (Item, Brand, Category, Cart, CartItem, Promotion) with validations and associations
   - 5 Service objects following Strategy pattern
   - 1 Main pricing service coordinating calculations
 - **Documentation**:
@@ -101,6 +101,8 @@ flexcar_promotions/
 ├── app/
 │   ├── models/flexcar_promotions/
 │   │   ├── item.rb
+│   │   ├── brand.rb
+│   │   ├── category.rb
 │   │   ├── cart.rb
 │   │   ├── cart_item.rb
 │   │   └── promotion.rb
@@ -156,6 +158,14 @@ New promotion types can be added by:
 ## 🧪 Test Coverage
 
 ```
+FlexcarPromotions::Brand
+  ✓ Validations
+  ✓ Associations with Items
+
+FlexcarPromotions::Category
+  ✓ Validations
+  ✓ Associations with Items
+
 FlexcarPromotions::Cart
   ✓ Associations
   ✓ Add/Remove items
@@ -183,7 +193,7 @@ FlexcarPromotions::PricingService
   ✓ Best discount selection
   ✓ Single-use promotions
 
-47 examples, 0 failures
+73 examples, 0 failures
 ```
 
 ## 🎯 Design Patterns Used
