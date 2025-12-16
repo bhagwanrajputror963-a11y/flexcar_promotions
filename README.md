@@ -84,7 +84,7 @@ FlexcarPromotions::Promotion.create!(
   name: 'Buy 2 Get 1 Free',
   promotion_type: 'buy_x_get_y',
   target_type: 'Item',
-  target_id: soda.id,
+  target_id: laptop.id,
   start_time: Time.current,
   config: {
     'buy_quantity' => 2,
@@ -245,6 +245,13 @@ bundle exec rubocop
 # Run
 bundle exec rails runner demo.rb
 ```
+
+## Improvements
+1. We can add money gem for currency conversion and management. I didn't add it because it was not mentioned as a requirement.
+2. I didn't add any Sidekiq or background job because it can be handled in the main app.
+3. I mostly managed all test cases but we can add more based on conditions and requirements.
+4. I added demo.rb file for manual testing.
+5. I followed service architecture because we need to do calculations, so I followed Avoid Fat Models — Use Service Objects.
 
 ## Contributing
 
