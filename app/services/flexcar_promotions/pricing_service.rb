@@ -22,7 +22,7 @@ module FlexcarPromotions
       # Cache applicable promotions per item_id for this calculation
       @applicable_promo_cache = {}
 
-      cart.cart_items.includes(item: [:category, :brand]).each do |cart_item|
+      cart.cart_items.includes(item: [ :category, :brand ]).each do |cart_item|
         item_result = calculate_item_price(cart_item, used_promotions)
         result[:items] << item_result
         result[:subtotal] += item_result[:base_price]

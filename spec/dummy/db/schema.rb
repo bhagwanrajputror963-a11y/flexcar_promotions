@@ -18,7 +18,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_14_180500) do
     t.datetime "created_at", null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_flexcar_promotions_brands_on_name", unique: true
+    t.index [ "name" ], name: "index_flexcar_promotions_brands_on_name", unique: true
   end
 
   create_table "flexcar_promotions_cart_items", force: :cascade do |t|
@@ -28,9 +28,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_14_180500) do
     t.decimal "quantity", precision: 10, scale: 2
     t.datetime "updated_at", null: false
     t.decimal "weight", precision: 10, scale: 2
-    t.index ["cart_id", "item_id"], name: "index_flexcar_promotions_cart_items_on_cart_id_and_item_id", unique: true
-    t.index ["cart_id"], name: "index_flexcar_promotions_cart_items_on_cart_id"
-    t.index ["item_id"], name: "index_flexcar_promotions_cart_items_on_item_id"
+    t.index [ "cart_id", "item_id" ], name: "index_flexcar_promotions_cart_items_on_cart_id_and_item_id", unique: true
+    t.index [ "cart_id" ], name: "index_flexcar_promotions_cart_items_on_cart_id"
+    t.index [ "item_id" ], name: "index_flexcar_promotions_cart_items_on_item_id"
   end
 
   create_table "flexcar_promotions_carts", force: :cascade do |t|
@@ -42,7 +42,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_14_180500) do
     t.datetime "created_at", null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_flexcar_promotions_categories_on_name", unique: true
+    t.index [ "name" ], name: "index_flexcar_promotions_categories_on_name", unique: true
   end
 
   create_table "flexcar_promotions_items", force: :cascade do |t|
@@ -53,8 +53,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_14_180500) do
     t.decimal "price", precision: 10, scale: 2, null: false
     t.string "sale_unit", null: false
     t.datetime "updated_at", null: false
-    t.index ["brand_id"], name: "index_flexcar_promotions_items_on_brand_id"
-    t.index ["category_id"], name: "index_flexcar_promotions_items_on_category_id"
+    t.index [ "brand_id" ], name: "index_flexcar_promotions_items_on_brand_id"
+    t.index [ "category_id" ], name: "index_flexcar_promotions_items_on_category_id"
   end
 
   create_table "flexcar_promotions_promotions", force: :cascade do |t|
@@ -68,10 +68,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_14_180500) do
     t.string "target_type", null: false
     t.datetime "updated_at", null: false
     t.decimal "value", precision: 10, scale: 2
-    t.index ["end_time"], name: "index_flexcar_promotions_promotions_on_end_time"
-    t.index ["promotion_type"], name: "index_flexcar_promotions_promotions_on_promotion_type"
-    t.index ["start_time"], name: "index_flexcar_promotions_promotions_on_start_time"
-    t.index ["target_type", "target_id"], name: "idx_on_target_type_target_id_200cfb82f8"
+    t.index [ "end_time" ], name: "index_flexcar_promotions_promotions_on_end_time"
+    t.index [ "promotion_type" ], name: "index_flexcar_promotions_promotions_on_promotion_type"
+    t.index [ "start_time" ], name: "index_flexcar_promotions_promotions_on_start_time"
+    t.index [ "target_type", "target_id" ], name: "idx_on_target_type_target_id_200cfb82f8"
   end
 
   add_foreign_key "flexcar_promotions_cart_items", "flexcar_promotions_carts", column: "cart_id"
