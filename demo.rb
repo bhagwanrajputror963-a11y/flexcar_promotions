@@ -94,8 +94,7 @@ FlexcarPromotions::Promotion.create!(
   name: '$200 OFF MACBOOK',
   promotion_type: 'flat_discount',
   value: 200,
-  target_type: 'Item',
-  target_id: laptop.id,
+  target: laptop,
   start_time: 1.day.ago,
   end_time: 1.week.from_now
 )
@@ -105,17 +104,15 @@ FlexcarPromotions::Promotion.create!(
   name: '20% OFF ACCESSORIES',
   promotion_type: 'percentage_discount',
   value: 20,
-  target_type: 'Category',
-  start_time: 1.day.ago,
-  config: { 'category' => 'accessories' }
+  target: accessories,
+  start_time: 1.day.ago
 )
 
 # 3. BUY X GET Y
 FlexcarPromotions::Promotion.create!(
   name: 'BUY 2 KEYBOARDS GET 1 AT 50%',
   promotion_type: 'buy_x_get_y',
-  target_type: 'Item',
-  target_id: keyboard.id,
+  target: keyboard,
   start_time: 1.day.ago,
   config: {
     'buy_quantity' => 2,
@@ -129,8 +126,7 @@ FlexcarPromotions::Promotion.create!(
   name: '50% OFF COFFEE ABOVE 200G',
   promotion_type: 'weight_threshold',
   value: 50,
-  target_type: 'Item',
-  target_id: coffee.id,
+  target: coffee,
   start_time: 1.day.ago,
   config: { 'threshold_weight' => 200 }
 )
@@ -140,9 +136,8 @@ FlexcarPromotions::Promotion.create!(
   name: '15% OFF ACCESSORIES (LOW PRIORITY)',
   promotion_type: 'percentage_discount',
   value: 15,
-  target_type: 'Category',
-  start_time: 1.day.ago,
-  config: { 'category' => 'accessories' }
+  target: accessories,
+  start_time: 1.day.ago
 )
 
 # 6. EXPIRED PROMOTION (SHOULD NOT APPLY)
@@ -150,8 +145,7 @@ FlexcarPromotions::Promotion.create!(
   name: 'EXPIRED 50% OFF KEYBOARD',
   promotion_type: 'percentage_discount',
   value: 50,
-  target_type: 'Item',
-  target_id: keyboard.id,
+  target: keyboard,
   start_time: 10.days.ago,
   end_time: 5.days.ago
 )

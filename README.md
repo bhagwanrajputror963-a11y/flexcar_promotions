@@ -84,8 +84,7 @@ FlexcarPromotions::Promotion.create!(
   name: '$20 off Laptop',
   promotion_type: 'flat_discount',
   value: 20.00,
-  target_type: 'Item',
-  target_id: laptop.id,
+  target: laptop,
   start_time: Time.current,
   end_time: 1.week.from_now
 )
@@ -95,8 +94,7 @@ FlexcarPromotions::Promotion.create!(
   name: '15% off Electronics',
   promotion_type: 'percentage_discount',
   value: 15,
-  target_type: 'Category',
-  target_id: electronics.id,
+  target: electronics,
   start_time: Time.current
 )
 
@@ -104,8 +102,7 @@ FlexcarPromotions::Promotion.create!(
 FlexcarPromotions::Promotion.create!(
   name: 'Buy 2 Get 1 Free',
   promotion_type: 'buy_x_get_y',
-  target_type: 'Item',
-  target_id: laptop.id,
+  target: laptop,
   start_time: Time.current,
   config: {
     'buy_quantity' => 2,
@@ -119,11 +116,13 @@ FlexcarPromotions::Promotion.create!(
   name: '50% off 200g+ Coffee',
   promotion_type: 'weight_threshold',
   value: 50,
-  target_type: 'Item',
-  target_id: coffee.id,
+  target: coffee,
   start_time: Time.current,
   config: { 'threshold_weight' => 200 }
 )
+
+# Note: You can still use target_type and target_id if needed:
+# target_type: 'Item', target_id: coffee.id
 ```
 
 ### Using the Cart
