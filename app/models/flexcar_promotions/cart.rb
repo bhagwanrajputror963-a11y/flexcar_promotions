@@ -24,6 +24,14 @@ module FlexcarPromotions
 
     def remove_item(item)
       cart_items.find_by(item: item)&.destroy
+
+      # Remove any applied promo codes that target this item
+      self.applied_promotion_ids ||= []
+      removed_promos = Promotion.where(id: applied_promotion_ids, target_type: 'Item', target_id: item.id).pluck(:id)
+      if removed_promos.any?
+        self.applied_promotion_ids -= removed_promos
+        save!
+      end
     end
 
     def calculate_total
@@ -32,6 +40,8 @@ module FlexcarPromotions
 
     def clear
       cart_items.destroy_all
+      self.applied_promotion_ids = []
+      save!
     end
 
     def apply_promo_code(code)
@@ -41,6 +51,17 @@ module FlexcarPromotions
 
       if cart_items.empty?
         return { success: false, error: "Cannot apply a promo code to an empty cart" }
+      end
+
+      # Check if the cart contains a valid item for this promotion
+      valid = false
+      if promotion.target_type == 'Item'
+        valid = cart_items.any? { |ci| ci.item_id == promotion.target_id }
+      elsif promotion.target_type == 'Category'
+        valid = cart_items.any? { |ci| ci.item.category_id == promotion.target_id }
+      end
+      unless valid
+        return { success: false, error: "No valid item in cart for this promo code" }
       end
 
       self.applied_promotion_ids ||= []
