@@ -13,6 +13,7 @@ module FlexcarPromotions
     validates :price, presence: true, numericality: { greater_than: 0 }
     validates :sale_unit, presence: true, inclusion: { in: SALE_UNITS }
     validates :category, presence: true
+    validates :stock_quantity, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
     has_many :cart_items, dependent: :destroy
     # Normalized associations (do not shadow legacy string attributes)
@@ -42,6 +43,18 @@ module FlexcarPromotions
 
     def sold_by_quantity?
       sale_unit == "quantity"
+    end
+
+    def in_stock?(quantity_or_weight = 1)
+      return true if stock_quantity.nil? # Unlimited stock if not set
+      return stock_quantity > 0 if sold_by_quantity?
+
+      # For weight-based items, we assume stock_quantity represents grams
+      stock_quantity >= quantity_or_weight
+    end
+
+    def available_stock
+      stock_quantity || Float::INFINITY
     end
   end
 end
