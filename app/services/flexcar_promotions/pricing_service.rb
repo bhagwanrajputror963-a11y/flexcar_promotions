@@ -37,15 +37,34 @@ module FlexcarPromotions
 
     def calculate_item_price(cart_item, used_promotions)
       base_price = cart_item.base_price
-      best_promotion = find_best_promotion(cart_item, used_promotions)
 
-      discount = if best_promotion
-                   calculate_discount(cart_item, best_promotion)
-      else
-                   0
+      # Only consider manually applied promotions from the cart
+      cart = cart_item.cart
+      applied_promotion_ids = cart.applied_promotion_ids || []
+
+      manually_applied_promotions = @active_promotions.select do |promo|
+        applied_promotion_ids.include?(promo.id)
       end
 
-      used_promotions.add(best_promotion) if best_promotion && !used_promotions.include?(best_promotion)
+      # Find the best applicable promotion from manually applied ones
+      best_promotion = nil
+      discount = 0
+
+      manually_applied_promotions.each do |promotion|
+        next unless promotion.applies_to?(cart_item.item)
+        next if promotion.target_type == 'Item' && used_promotions.include?(promotion.id)
+
+        promo_discount = promotion.calculate_discount(cart_item)
+        if promo_discount > discount
+          discount = promo_discount
+          best_promotion = promotion
+        end
+      end
+
+      # Mark item-level promotions as used
+      if best_promotion && best_promotion.target_type == 'Item'
+        used_promotions << best_promotion.id
+      end
 
       {
         item_id: cart_item.item_id,
@@ -63,7 +82,12 @@ module FlexcarPromotions
       # Use cached applicable promotions for this item if available
       item_id = cart_item.item_id
       @applicable_promo_cache[item_id] ||= @active_promotions.select { |promotion| promotion.applies_to?(cart_item.item) }
-      applicable_promotions = @applicable_promo_cache[item_id].reject { |promotion| used_promotions.include?(promotion) }
+
+      # Only exclude item-specific promotions that have been used
+      # Category/Brand level promotions can be reused across multiple items
+      applicable_promotions = @applicable_promo_cache[item_id].reject do |promotion|
+        used_promotions.include?(promotion) && promotion.target_type == "Item"
+      end
 
       return nil if applicable_promotions.empty?
 

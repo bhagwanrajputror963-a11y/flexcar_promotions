@@ -2,6 +2,9 @@
 
 module FlexcarPromotions
   class CartItem < ApplicationRecord
+        def unit_price
+          item.price
+        end
     belongs_to :cart
     belongs_to :item
 

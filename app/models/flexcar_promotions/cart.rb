@@ -5,6 +5,8 @@ module FlexcarPromotions
     has_many :cart_items, dependent: :destroy
     has_many :items, through: :cart_items
 
+    serialize :applied_promotion_ids, coder: JSON
+
     def add_item(item, quantity: nil, weight: nil)
       validate_item_unit!(item, quantity, weight)
 
@@ -30,6 +32,35 @@ module FlexcarPromotions
 
     def clear
       cart_items.destroy_all
+    end
+
+    def apply_promo_code(code)
+      promotion = Promotion.find_by(promo_code: code)
+      return { success: false, error: "Invalid promo code" } unless promotion
+      return { success: false, error: "Promotion has expired" } unless promotion.active?
+
+      if cart_items.empty?
+        return { success: false, error: "Cannot apply a promo code to an empty cart" }
+      end
+
+      self.applied_promotion_ids ||= []
+      if applied_promotion_ids.include?(promotion.id)
+        return { success: false, error: "Promo code already applied" }
+      end
+
+      applied_promotion_ids << promotion.id
+      save!
+      { success: true, promotion: promotion }
+    end
+
+    def remove_promo_code(code)
+      promotion = Promotion.find_by(promo_code: code)
+      return { success: false, error: "Invalid promo code" } unless promotion
+
+      self.applied_promotion_ids ||= []
+      applied_promotion_ids.delete(promotion.id)
+      save!
+      { success: true }
     end
 
     private
