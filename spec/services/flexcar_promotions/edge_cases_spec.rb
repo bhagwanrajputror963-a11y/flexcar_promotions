@@ -50,9 +50,11 @@ RSpec.describe 'Edge Cases and Complex Scenarios', type: :model do
     context 'when flat discount exceeds item price' do
       it 'caps discount at item price' do
         item = create(:item, price: 10.00, sale_unit: 'quantity')
-        create(:promotion, :flat_discount, target_type: 'Item', target_id: item.id, value: 50.00)
+        promotion = create(:promotion, :flat_discount, target_type: 'Item', target_id: item.id, value: 50.00)
 
         cart.add_item(item, quantity: 1)
+        cart.applied_promotion_ids = [promotion.id]
+        cart.save!
         result = cart.calculate_total
 
         expect(result[:total_discount]).to eq(10.00)
@@ -63,9 +65,11 @@ RSpec.describe 'Edge Cases and Complex Scenarios', type: :model do
     context 'when percentage is 100%' do
       it 'makes item free' do
         item = create(:item, price: 100.00, sale_unit: 'quantity')
-        create(:promotion, :percentage_discount, target_type: 'Item', target_id: item.id, value: 100)
+        promotion = create(:promotion, :percentage_discount, target_type: 'Item', target_id: item.id, value: 100)
 
         cart.add_item(item, quantity: 1)
+        cart.applied_promotion_ids = [promotion.id]
+        cart.save!
         result = cart.calculate_total
 
         expect(result[:total_discount]).to eq(100.00)
@@ -166,9 +170,11 @@ RSpec.describe 'Edge Cases and Complex Scenarios', type: :model do
   describe 'rounding precision' do
     it 'maintains correct decimal precision' do
       item = create(:item, price: 33.33, sale_unit: 'quantity')
-      create(:promotion, :percentage_discount, target_type: 'Item', target_id: item.id, value: 33)
+      promotion = create(:promotion, :percentage_discount, target_type: 'Item', target_id: item.id, value: 33)
 
       cart.add_item(item, quantity: 1)
+      cart.applied_promotion_ids = [promotion.id]
+      cart.save!
       result = cart.calculate_total
 
       discount = 10.99

@@ -7,12 +7,9 @@ module FlexcarPromotions
         def calculate_discount(cart_item)
           case promotion_type
           when 'flat_discount'
-            # Flat discount applies once per item/weight
-            if target_type == 'Item'
-              value.to_f * cart_item.quantity.to_i
-            else
-              value.to_f
-            end
+            # Flat discount capped at base price
+            base_price = cart_item.base_price
+            [ value.to_f, base_price ].min
           when 'percentage_discount'
             base = cart_item.base_price
             (base * value.to_f / 100.0).round(2)

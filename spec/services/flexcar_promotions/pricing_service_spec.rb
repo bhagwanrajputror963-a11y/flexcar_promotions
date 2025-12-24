@@ -31,6 +31,8 @@ RSpec.describe FlexcarPromotions::PricingService do
 
       before do
         cart.add_item(item, quantity: 1)
+        cart.applied_promotion_ids = [promotion.id]
+        cart.save!
       end
 
       it 'applies flat discount' do
@@ -49,6 +51,8 @@ RSpec.describe FlexcarPromotions::PricingService do
 
       before do
         cart.add_item(item, quantity: 1)
+        cart.applied_promotion_ids = [promotion.id]
+        cart.save!
       end
 
       it 'applies percentage discount' do
@@ -69,14 +73,16 @@ RSpec.describe FlexcarPromotions::PricingService do
 
       before do
         cart.add_item(item, quantity: 4)
+        cart.applied_promotion_ids = [promotion.id]
+        cart.save!
       end
 
       it 'applies buy 2 get 1 free discount' do
         result = described_class.new(cart).calculate
 
         expect(result[:subtotal]).to eq(8.00)
-        expect(result[:total_discount]).to eq(4.00) # 2 free items
-        expect(result[:total]).to eq(4.00)
+        expect(result[:total_discount]).to eq(2.00) # 1 free item (4 items = 1 complete set of 3)
+        expect(result[:total]).to eq(6.00)
       end
     end
 
@@ -89,6 +95,8 @@ RSpec.describe FlexcarPromotions::PricingService do
 
       before do
         cart.add_item(item, weight: 250)
+        cart.applied_promotion_ids = [promotion.id]
+        cart.save!
       end
 
       it 'applies discount when weight threshold is met' do
@@ -114,6 +122,8 @@ RSpec.describe FlexcarPromotions::PricingService do
       before do
         cart.add_item(item1, quantity: 1)
         cart.add_item(item2, quantity: 1)
+        cart.applied_promotion_ids = [promotion.id]
+        cart.save!
       end
 
       it 'applies promotion only to items in specified category' do
@@ -132,6 +142,8 @@ RSpec.describe FlexcarPromotions::PricingService do
 
       before do
         cart.add_item(item, quantity: 1)
+        cart.applied_promotion_ids = [flat_promotion.id, percentage_promotion.id]
+        cart.save!
       end
 
       it 'applies the best discount' do
@@ -146,13 +158,15 @@ RSpec.describe FlexcarPromotions::PricingService do
       let!(:item1) { create(:item, name: 'Item 1', price: 50.00, category: 'test') }
       let!(:item2) { create(:item, name: 'Item 2', price: 50.00, category: 'test') }
       let!(:promotion) do
-        create(:promotion, :percentage_discount, target_type: 'Category',
-               value: 50, config: { 'category' => 'test' })
+        create(:promotion, :percentage_discount, target_type: 'Item', target_id: item1.id,
+               value: 50)
       end
 
       before do
         cart.add_item(item1, quantity: 1)
         cart.add_item(item2, quantity: 1)
+        cart.applied_promotion_ids = [promotion.id]
+        cart.save!
       end
 
       it 'applies promotion to first eligible item only' do

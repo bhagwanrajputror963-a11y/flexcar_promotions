@@ -74,5 +74,9 @@ FactoryBot.define do
       start_time { 2.days.ago }
       end_time { 1.day.ago }
     end
+
+    trait :with_promo_code do
+      sequence(:promo_code) { |n| "PROMO#{n}" }
+    end
   end
 end
