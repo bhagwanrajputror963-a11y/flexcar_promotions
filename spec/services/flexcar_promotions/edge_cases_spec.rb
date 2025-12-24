@@ -53,7 +53,7 @@ RSpec.describe 'Edge Cases and Complex Scenarios', type: :model do
         promotion = create(:promotion, :flat_discount, target_type: 'Item', target_id: item.id, value: 50.00)
 
         cart.add_item(item, quantity: 1)
-        cart.applied_promotion_ids = [promotion.id]
+        cart.applied_promotion_ids = [ promotion.id ]
         cart.save!
         result = cart.calculate_total
 
@@ -68,7 +68,7 @@ RSpec.describe 'Edge Cases and Complex Scenarios', type: :model do
         promotion = create(:promotion, :percentage_discount, target_type: 'Item', target_id: item.id, value: 100)
 
         cart.add_item(item, quantity: 1)
-        cart.applied_promotion_ids = [promotion.id]
+        cart.applied_promotion_ids = [ promotion.id ]
         cart.save!
         result = cart.calculate_total
 
@@ -173,7 +173,7 @@ RSpec.describe 'Edge Cases and Complex Scenarios', type: :model do
       promotion = create(:promotion, :percentage_discount, target_type: 'Item', target_id: item.id, value: 33)
 
       cart.add_item(item, quantity: 1)
-      cart.applied_promotion_ids = [promotion.id]
+      cart.applied_promotion_ids = [ promotion.id ]
       cart.save!
       result = cart.calculate_total
 

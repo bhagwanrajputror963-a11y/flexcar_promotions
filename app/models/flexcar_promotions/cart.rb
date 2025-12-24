@@ -27,7 +27,7 @@ module FlexcarPromotions
 
       # Remove any applied promo codes that target this item
       self.applied_promotion_ids ||= []
-      removed_promos = Promotion.where(id: applied_promotion_ids, target_type: 'Item', target_id: item.id).pluck(:id)
+      removed_promos = Promotion.where(id: applied_promotion_ids, target_type: "Item", target_id: item.id).pluck(:id)
       if removed_promos.any?
         self.applied_promotion_ids -= removed_promos
         save!
@@ -55,9 +55,9 @@ module FlexcarPromotions
 
       # Check if the cart contains a valid item for this promotion
       valid = false
-      if promotion.target_type == 'Item'
+      if promotion.target_type == "Item"
         valid = cart_items.any? { |ci| ci.item_id == promotion.target_id }
-      elsif promotion.target_type == 'Category'
+      elsif promotion.target_type == "Category"
         valid = cart_items.any? { |ci| ci.item.category_id == promotion.target_id }
       end
       unless valid
@@ -87,10 +87,12 @@ module FlexcarPromotions
     private
 
     def validate_item_unit!(item, quantity, weight)
-      if item.sold_by_quantity? && quantity.nil?
-        raise ArgumentError, "Quantity required for #{item.name}"
-      elsif item.sold_by_weight? && weight.nil?
-        raise ArgumentError, "Weight required for #{item.name}"
+      if item.sold_by_quantity?
+        raise ArgumentError, "Quantity required for #{item.name}" if quantity.nil?
+        raise ArgumentError, "Quantity must be greater than 0" if quantity <= 0
+      elsif item.sold_by_weight?
+        raise ArgumentError, "Weight required for #{item.name}" if weight.nil?
+        raise ArgumentError, "Weight must be greater than 0" if weight <= 0
       end
     end
   end

@@ -95,7 +95,7 @@ RSpec.describe FlexcarPromotions::Cart, type: :model do
 
     it 'clears applied promotion ids' do
       cart.add_item(item, quantity: 2)
-      cart.applied_promotion_ids = [1, 2, 3]
+      cart.applied_promotion_ids = [ 1, 2, 3 ]
       cart.save!
       cart.clear
 

@@ -2,21 +2,20 @@
 
 module FlexcarPromotions
   class Promotion < ApplicationRecord
-
         # Calculate the discount amount for a given cart_item
         def calculate_discount(cart_item)
           case promotion_type
-          when 'flat_discount'
+          when "flat_discount"
             # Flat discount capped at base price
             base_price = cart_item.base_price
             [ value.to_f, base_price ].min
-          when 'percentage_discount'
+          when "percentage_discount"
             base = cart_item.base_price
             (base * value.to_f / 100.0).round(2)
-          when 'buy_x_get_y'
-            buy_qty = config['buy_quantity'].to_i
-            get_qty = config['get_quantity'].to_i
-            discount_percent = config['discount_percent'].to_f
+          when "buy_x_get_y"
+            buy_qty = config["buy_quantity"].to_i
+            get_qty = config["get_quantity"].to_i
+            discount_percent = config["discount_percent"].to_f
             if buy_qty > 0 && get_qty > 0 && discount_percent > 0
               eligible_sets = (cart_item.quantity.to_i / (buy_qty + get_qty))
               free_items = eligible_sets * get_qty
@@ -24,8 +23,8 @@ module FlexcarPromotions
             else
               0
             end
-          when 'weight_threshold'
-            threshold = config['threshold_weight'].to_f
+          when "weight_threshold"
+            threshold = config["threshold_weight"].to_f
             if cart_item.weight.to_f >= threshold
               base = cart_item.base_price
               (base * value.to_f / 100.0).round(2)

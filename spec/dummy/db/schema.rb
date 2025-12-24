@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_24_095948) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_24_102139) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -53,9 +53,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_24_095948) do
     t.string "name", null: false
     t.decimal "price", precision: 10, scale: 2, null: false
     t.string "sale_unit", null: false
+    t.integer "stock_quantity", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["brand_id"], name: "index_flexcar_promotions_items_on_brand_id"
     t.index ["category_id"], name: "index_flexcar_promotions_items_on_category_id"
+    t.check_constraint "stock_quantity >= 0", name: "stock_quantity_non_negative"
   end
 
   create_table "flexcar_promotions_promotions", force: :cascade do |t|

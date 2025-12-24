@@ -52,7 +52,7 @@ module FlexcarPromotions
 
       manually_applied_promotions.each do |promotion|
         next unless promotion.applies_to?(cart_item.item)
-        next if promotion.target_type == 'Item' && used_promotions.include?(promotion.id)
+        next if promotion.target_type == "Item" && used_promotions.include?(promotion.id)
 
         promo_discount = promotion.calculate_discount(cart_item)
         if promo_discount > discount
@@ -62,7 +62,7 @@ module FlexcarPromotions
       end
 
       # Mark item-level promotions as used
-      if best_promotion && best_promotion.target_type == 'Item'
+      if best_promotion && best_promotion.target_type == "Item"
         used_promotions << best_promotion.id
       end
 

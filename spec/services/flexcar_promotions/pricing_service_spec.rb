@@ -31,7 +31,7 @@ RSpec.describe FlexcarPromotions::PricingService do
 
       before do
         cart.add_item(item, quantity: 1)
-        cart.applied_promotion_ids = [promotion.id]
+        cart.applied_promotion_ids = [ promotion.id ]
         cart.save!
       end
 
@@ -51,7 +51,7 @@ RSpec.describe FlexcarPromotions::PricingService do
 
       before do
         cart.add_item(item, quantity: 1)
-        cart.applied_promotion_ids = [promotion.id]
+        cart.applied_promotion_ids = [ promotion.id ]
         cart.save!
       end
 
@@ -73,7 +73,7 @@ RSpec.describe FlexcarPromotions::PricingService do
 
       before do
         cart.add_item(item, quantity: 4)
-        cart.applied_promotion_ids = [promotion.id]
+        cart.applied_promotion_ids = [ promotion.id ]
         cart.save!
       end
 
@@ -95,7 +95,7 @@ RSpec.describe FlexcarPromotions::PricingService do
 
       before do
         cart.add_item(item, weight: 250)
-        cart.applied_promotion_ids = [promotion.id]
+        cart.applied_promotion_ids = [ promotion.id ]
         cart.save!
       end
 
@@ -122,7 +122,7 @@ RSpec.describe FlexcarPromotions::PricingService do
       before do
         cart.add_item(item1, quantity: 1)
         cart.add_item(item2, quantity: 1)
-        cart.applied_promotion_ids = [promotion.id]
+        cart.applied_promotion_ids = [ promotion.id ]
         cart.save!
       end
 
@@ -142,7 +142,7 @@ RSpec.describe FlexcarPromotions::PricingService do
 
       before do
         cart.add_item(item, quantity: 1)
-        cart.applied_promotion_ids = [flat_promotion.id, percentage_promotion.id]
+        cart.applied_promotion_ids = [ flat_promotion.id, percentage_promotion.id ]
         cart.save!
       end
 
@@ -165,7 +165,7 @@ RSpec.describe FlexcarPromotions::PricingService do
       before do
         cart.add_item(item1, quantity: 1)
         cart.add_item(item2, quantity: 1)
-        cart.applied_promotion_ids = [promotion.id]
+        cart.applied_promotion_ids = [ promotion.id ]
         cart.save!
       end
 
